@@ -1,0 +1,64 @@
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(1rem);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.card {
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: transform .2s ease-in-out, box-shadow .2s ease-in-out, opacity .4s ease-in-out;
+    animation: fadeIn 0.5s ease-in-out forwards;
+    opacity: 0;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+}
+
+.collapsible-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+    padding: 0.5rem 0;
+    border-bottom: 1px solid #333;
+    transition: all 0.3s ease;
+}
+
+.icon {
+    font-size: 1rem;
+    transition: transform 0.3s ease;
+}
+
+.icon i {
+    transition: transform 0.3s ease;
+}
+
+.icon i.collapsed {
+    transform: rotate(90deg);
+}
+
+.columns {
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    transform: translateY(0);
+}
+
+.columns[style*="none"] {
+    opacity: 0;
+    transform: translateY(-20px);
+}
+
+.icon .fa-chevron-up {
+    transition: transform 0.3s ease;
+}
+
+.collapsed .fa-chevron-up {
+    transform: rotate(-180deg);
+}

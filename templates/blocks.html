@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>PlasmaTrap Block Viewer</title>
+    <link href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css" rel="stylesheet">
+    <link href="https://jenil.github.io/bulmaswatch/darkly/bulmaswatch.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/static/style.css">
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+</head>
+
+<body>
+    <section class="section">
+        <div class="container">
+            <h2 class="title is-2 mb-4">List of plasmatrap.com blocks ({{ blocks.reject | length }} suspend, {{ blocks.followers_only | length }} silence)</h2>
+            <h3 class="subtitle mb-4">Firefish does not support block reasons. Any questions about why a domain is blocked, or if you wish to discuss a block, ask <a href="https://plasmatrap.com/@admin">@admin</a>.</h3>
+            <br />
+             <!-- Reject Section -->
+            <div class="block">
+                <div class="collapsible-header" onclick="toggleCollapsible('reject-section')">
+                    Rejects
+                    <span class="icon">
+                        <i class="fas fa-chevron-up" id="reject-arrow"></i>
+                    </span>
+                </div>
+                <div id="reject-section" class="columns is-multiline mt-4">
+                    {% for block in blocks.reject %}
+                    <div class="column is-one-third">
+                        <div class="card has-background-danger">
+                            <div class="card-content">
+                                <p class="title is-4">{{ block.blocked }}</p>
+                                <span class="icon">
+                                    <i class="fas fa-times"></i>
+                                </span> Suspended
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <!-- Followers Only Section -->
+            <div class="block">
+                <div class="collapsible-header" onclick="toggleCollapsible('followers-section')">
+                    Followers Only
+                    <span class="icon">
+                        <i class="fas fa-chevron-up" id="followers-arrow"></i>
+                    </span>
+                </div>
+                <div id="followers-section" class="columns is-multiline mt-4">
+                    {% for block in blocks.followers_only %}
+                    <div class="column is-one-third">
+                        <div class="card has-background-info">
+                            <div class="card-content">
+                                <p class="title is-4">{{ block.blocked }}</p>
+                                <span class="icon">
+                                    <i class="fas fa-volume-mute"></i>
+                                </span> Silenced
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            <h4>This list is NOT updated in real time. It may take a day for new blocks to show up.</h4>
+        </div>
+    </section>
+    <!-- JavaScript function to toggle collapsible sections -->
+    <script>
+        window.onload = function() {
+            document.getElementById('reject-section').style.display = 'flex';
+            document.getElementById('followers-section').style.display = 'flex';
+        }
+
+        function toggleCollapsible(id) {
+            const section = document.getElementById(id);
+            const header = section.previousElementSibling;
+
+            if (section.style.display === 'none' || !section.style.display) {
+                section.style.display = 'flex';
+                header.classList.remove('collapsed');
+            } else {
+                section.style.display = 'none';
+                header.classList.add('collapsed');
+            }
+        }
+
+
+    </script>
+</body>
+
+
+</html>
