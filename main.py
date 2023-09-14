@@ -16,7 +16,6 @@ templates = Jinja2Templates(directory="templates")
 BLOCKS_URL = "https://fba.ryona.agency/api?reverse=plasmatrap.com"
 blocks_data = {"reject": [], "followers_only": []}
 
-@app.get("/update_blocks/")
 def update_blocks():
     global blocks_data
     try:
