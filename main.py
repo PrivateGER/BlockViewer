@@ -13,43 +13,24 @@ app = FastAPI()
 app.mount("/static", StaticFiles(directory="static"), name="static")
 templates = Jinja2Templates(directory="templates")
 
-BLOCKS_URL = "https://fba.ryona.agency/api?reverse=plasmatrap.com"
+META_URL = "https://plasmatrap.com/api/admin/meta"
+TOKEN = ""
 blocks_data = {"reject": [], "followers_only": []}
 
 def update_blocks():
     global blocks_data
     try:
-        response = requests.get(BLOCKS_URL)
+        response = requests.post(META_URL, json={"i": TOKEN})
         data = response.json()
 
-        # FBA is not really a trusted source. We should check if the data is valid, if it doesn't contain pawoo and bae.st we're being fed nonsense.
-        # Iterate over the data and check if it contains pawoo and bae.st
-        canaryDomains = [
-            {
-                "domain": "pawoo.net",
-                "found": False
-            },
-            {
-                "domain": "bae.st",
-                "found": False
-            }
-        ]
+        if not data:
+            raise Exception("No data received from the server.")
 
-        for domain in canaryDomains:
-            for block in data.get('reject', []):
-                if domain["domain"] == block["blocked"]:
-                    print("Canary domain found, marking...")
-                    domain["found"] = True
-
-        # If the canary domains are not found, we're being fed nonsense. Raise an exception.
-        for domain in canaryDomains:
-            if not domain["found"]:
-                raise Exception("Canary domain not found, data is invalid.")
 
         print("Refreshed block data.")
 
-        blocks_data["reject"] = data.get('reject', [])
-        blocks_data["followers_only"] = data.get('followers_only', [])
+        blocks_data["reject"] = data.get('blockedHosts', [])
+        blocks_data["followers_only"] = data.get('silencedHosts', [])
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
     return {"status": "updated", "reject_count": len(blocks_data["reject"]), "followers_only_count": len(blocks_data["followers_only"])}
